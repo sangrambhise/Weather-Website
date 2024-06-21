@@ -13,9 +13,9 @@ Weatherpedia is a Django web application that provides weather forecasts and ana
 
 ## Screenshots
 
-Include some screenshots of your application here.
+![Screenshot (1757)](https://github.com/sangrambhise/Weather-Website/assets/114818287/7960d49b-51e4-45db-b1ff-4035b5f0da9b), ![Screenshot (1758)](https://github.com/sangrambhise/Weather-Website/assets/114818287/cfeff8eb-797c-4089-98c8-7fdb3c9d28fe), ![Screenshot (1759)](https://github.com/sangrambhise/Weather-Website/assets/114818287/2a8d6532-45b8-4193-8511-7b2c86aab2bd)., ![Screenshot (1760)](https://github.com/sangrambhise/Weather-Website/assets/114818287/cee6870d-119d-4fd3-bfd8-a239235e53a1), ![Screenshot (1761)](https://github.com/sangrambhise/Weather-Website/assets/114818287/7eefb0d0-f4c0-4e12-9176-da75be17dc2d)
 
-## Installation
+ ## Installation
 
 To run this project locally:
 
