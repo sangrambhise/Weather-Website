@@ -20,7 +20,7 @@ Include some screenshots of your application here.
 To run this project locally:
 
 1. Clone the repository:
-   git clone https://github.com/sangrambhise/weather.git
+   git clone https://github.com/sangrambhise/weather website.git
    cd weather
 
 2. Install dependencies:
