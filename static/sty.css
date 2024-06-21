@@ -1,0 +1,45 @@
+
+        @keyframes breath {
+            0%   {  background-size: 110% auto; }
+            50%  {  background-size: 150% auto; }
+            100% {  background-size: 110% auto; }      
+           }
+        #scroll-progress{
+            position: fixed; top: 0; width: 0%; height: 10px; z-index: 10000;
+        }
+         #wrapper-bg{
+           
+            -webkit-animation: breath 60s linear infinite;
+            animation: breath 60s linear infinite;
+            background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/4044.jpg');
+             background-size: cover;
+        } 
+        .btn{
+          color: aliceblue;
+        }
+        .date-container{
+            text-align: center;
+        }
+        .time{
+            margin-top: 8px;
+        }
+        .card-title{
+            text-align: center;
+        }
+        #row{
+            margin-right: calc(0.5 * var(--bs-gutter-x));
+            margin-left: calc(0.5 * var(--bs-gutter-x));
+        }
+        #card{
+            background-color: rgba(245, 245, 245, 0.4);
+        }
+        
+        .display-6 {
+            color: whitesmoke;
+        }
+        .table{
+            background-color: rgba(185, 162, 162, 0.6); color: white;width: max-content;
+        }
+        #wrapper-bg.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+            --bs-gutter-x: -0.5rem;}
+   

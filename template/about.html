@@ -1,0 +1,184 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+        .btn{
+          color: aliceblue;
+        }
+        .btn:hover{
+          color: antiquewhite;
+        }
+        .about-us {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .about {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .about h5 {
+            font-size: 1.5rem;
+            color: #6c757d;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about span {
+            color: #28a745;
+        }
+
+        .hire {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .hire:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            background-color: rgba(0, 0, 0, 0.025);
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+        .footer a {
+            color: #343a40;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Weatherpedia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/forecast/">Forecast</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/predict/">Analysis Page</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/top/">Hot and Cold Cities</a>
+              </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <section class="about-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="about">
+                        <h2>About Us</h2>
+                        <h5>Front-end Developer & <span>Designer</span></h5>
+                        <p>
+                            Talented group of learning software developers. Eager to design and work on new projects as
+                            these weatherpedia is built by us giving an early insight on weather of day to plan your
+                            whole day's work schedule.
+                        </p>
+                        <p>Hope you liked our website!</p>
+
+                        <div class="data">
+                            <a href="#" id="likeButton" class="hire">Like</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto mb-4">
+                    <p><i class="fas fa-users text-secondary"></i> Our Team Members</p>
+                    <p><i class="fas fa-print me-3 text-secondary"></i> Tanmay Djanvijay</p>
+                    <p><i class="fas fa-print me-3 text-secondary"></i> Hitesh Donge</p>
+                    <p><i class="fas fa-print me-3 text-secondary"></i> Tejas Kadbe</p>
+                    <p><i class="fas fa-print me-3 text-secondary"></i> Sangram Bhise</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>&copy; 2023 Copyright: <a href="#" class="fw-bold">Weatherpedia</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+    <!-- Custom Scripts -->
+    <script>
+        // Example of JavaScript functionality for the like button
+        document.getElementById('likeButton').addEventListener('click', function () {
+            alert('You liked our website!'); // You can replace this with any functionality you want
+        });
+    </script>
+</body>
+
+</html>

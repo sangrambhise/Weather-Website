@@ -1,0 +1,611 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+
+<body id="wrapper-bg">
+    <style>
+        @keyframes breath {
+            0%   {  background-size: 110% auto; }
+            50%  {  background-size: 150% auto; }
+            100% {  background-size: 110% auto; }      
+           }
+        #scroll-progress{
+            position: fixed; top: 0; width: 0%; height: 10px; z-index: 10000;
+        }
+         #wrapper-bg{
+           
+            -webkit-animation: breath 60s linear infinite;
+            animation: breath 60s linear infinite;
+            background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/4044.jpg');
+             background-size: cover;
+        } 
+        .btn{
+          color: aliceblue;
+        }
+        .btn:hover{
+          color: antiquewhite;
+        }
+        .date-container{
+            text-align: center;
+        }
+        .time{
+            margin-top: 8px;
+        }
+        .card-title{
+            text-align: center;
+        }
+        .progress{
+          background-color: rgba(245, 245, 245, 0);
+        }
+        #row{
+            margin-right: calc(0.5 * var(--bs-gutter-x));
+            margin-left: calc(0.5 * var(--bs-gutter-x));
+        }
+        #card{
+            background-color: rgba(245, 245, 245, 0.4);
+        }
+        #submit{
+          background-color:#000000;
+        }
+        .display-6 {
+            color: whitesmoke;
+        }
+        .table{
+            background-color: rgba(185, 162, 162, 0.6); color: white;
+        }
+        #wrapper-bg.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+            --bs-gutter-x: -0.5rem;}
+        </style>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Weatherpedia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about.html">About Us</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/forecast/">Forecast</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/predict/">Analysis Page</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/top/">Hot and Cold Cities</a>
+                  </li>
+            </ul>
+              </ul>
+              <form class="d-flex" role="search">
+                  <input id="city" class="form-control me-2" type="search" placeholder="Search City"
+                      aria-label="Search">
+                      <p id="error" style="color:aliceblue;"></p>
+                  <button class="btn btn-outline-success" type="submit" id="submit">Search</button>
+              </form>
+            </div>
+        </div>
+    </nav>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" id="scroll-progress" role="progressbar"
+            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="container">
+        
+        <main >
+            
+            <h1 class="my-1 text-center">Weather for <span id="cityName"></span></h1>
+            
+            <div class="date-container">
+                <span id="time1"></span>
+                <div class="time" id="time">
+                    
+                    <span id="day1"></span>
+                </div>
+                <div class="date" id="date">
+                    <span id="date1"></span>
+                </div>
+                <span id="timezone1"></span>
+            </div>
+            <h1 class="card-title pricing-card-title"><span id="description"></span><h1></h1>
+
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center" id="row">
+                <div class="col" >
+                    <div class="card mb-4 rounded-3 shadow-sm border-primary" id="card">
+                        <div class="card-header py-3 border-primary"  >
+                            <h4 class="my-0 fw-normal " >Temprature</h4>
+                        </div>
+
+                        <div class="card-body" >
+                            <img src="http://openweathermap.org/img/wn/01d@2x.png" id="wrapper-cg">
+                            <h1 class="card-title pricing-card-title"><span id="temp2"></span><small
+                                    class="text-body-secondary fw-light"><span>&#8451;</span></small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Temprature is <span id="temp">&#8451;</span></li>
+                                <li>Min Temprature is <span id="min_temp">&#8451;</span></li>
+                                <li>Max Temprature is <span id="max_temp">&#8451;</span></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col" >
+                    <div class="card mb-4 rounded-3 shadow-sm border-primary" id="card">
+                        <div class="card-header py-3 border-primary">
+                            <h4 class="my-0 fw-normal">Wind Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title"><span id="wind_speed2"></span><small
+                                    class="text-body-secondary fw-light"> m/s</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Feels like <span id="feels_like"></span>&#8451;</li>
+                                <li>Wind Speed is <span id="wind_speed"></span>m/s</li>
+                                <li>Wind Degrees is <span id="wind_degrees">&#176;</span></li>
+                                <li>Wind gust is <span id="wind_gust"></span>m/s</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm border-primary" id="card">
+                        <div class="card-header py-3 border-primary">
+                            <h4 class="my-0 fw-normal">Sun Info</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title"><span id="sunrise1"></span><small
+                                class="text-body-secondary fw-light"><span id="sunrise2"></span></small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Latitude is <span id="lat"></span></li>
+                                <li>Longitude is <span id="lon"></span></li>
+                                <li>Sunrise Time is <span id="sunrise"></span></li>
+                                <li>Sunset Time is <span id="sunset"></span></li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="display-6 text-center mb-4">Weather of Some of the Common places</h2>
+
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Temp</th>
+                            <th>Feels_like</th>
+                            <th>Description</th>
+                            <th>Max_temp</th>
+                            <th>Min_temp</th>
+                            <th>Sunrise</th>
+                            <th>Sunset</th>
+                            <th>Wind_degrees</th>
+                            <th>Wind_speed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Chennai</th>
+                            <td><span id="temp3"></span>&#8451;</td>
+                            <td><span id="feels_like3"></span>&#8451;</td>
+                            <td><span id="description3"></span></td>
+                            <td><span id="max_temp3"></span>&#8451;</td>
+                            <td><span id="min_temp3"></span>&#8451;</td>
+                            <td><span id="sunrise3"></span></td>
+                            <td><span id="sunset3"></span></td>
+                            <td><span id="wind_degrees3"></span></td>
+                            <td><span id="wind_speed3"></span>m/s</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Lucknow</th>
+                            <td><span id="temp4"></span>&#8451;</td>
+                            <td><span id="feels_like4"></span>&#8451;</td>
+                            <td><span id="description4"></span></td>
+                            <td><span id="max_temp4"></span>&#8451;</td>
+                            <td><span id="min_temp4"></span>&#8451;</td>
+                            <td><span id="sunrise4"></span></td>
+                            <td><span id="sunset4"></span></td>
+                            <td><span id="wind_degrees4"></span></td>
+                            <td><span id="wind_speed4"></span>m/s</td>
+                        </tr>
+                    </tbody>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Chandrapur</th>
+                            <td><span id="temp5"></span>&#8451;</td>
+                            <td><span id="feels_like5"></span>&#8451;</td>
+                            <td><span id="description5"></span></td>
+                            <td><span id="max_temp5"></span>&#8451;</td>
+                            <td><span id="min_temp5"></span>&#8451;</td>
+                            <td><span id="sunrise5"></span></td>
+                            <td><span id="sunset5"></span></td>
+                            <td><span id="wind_degrees5"></span></td>
+                            <td><span id="wind_speed5"></span>m/s</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Bhusawal</th>
+                            <td><span id="temp6"></span>&#8451;</td>
+                            <td><span id="feels_like6"></span>&#8451;</td>
+                            <td><span id="description6"></span></td>
+                            <td><span id="max_temp6"></span>&#8451;</td>
+                            <td><span id="min_temp6"></span>&#8451;</td>
+                            <td><span id="sunrise6"></span></td>
+                            <td><span id="sunset6"></span></td>
+                            <td><span id="wind_degrees6"></span></td>
+                            <td><span id="wind_speed6"></span>m/s</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Delhi</th>
+                            <td><span id="temp7"></span>&#8451;</td>
+                            <td><span id="feels_like7"></span>&#8451;</td>
+                            <td><span id="description7"></span></td>
+                            <td><span id="max_temp7"></span>&#8451;</td>
+                            <td><span id="min_temp7"></span>&#8451;</td>
+                            <td><span id="sunrise7"></span></td>
+                            <td><span id="sunset7"></span></td>
+                            <td><span id="wind_degrees7"></span></td>
+                            <td><span id="wind_speed7"></span>m/s</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Pune</th>
+                            <td><span id="temp8"></span>&#8451;</td>
+                            <td><span id="feels_like8"></span>&#8451;</td>
+                            <td><span id="description8"></span></td>
+                            <td><span id="max_temp8"></span>&#8451;</td>
+                            <td><span id="min_temp8"></span>&#8451;</td>
+                            <td><span id="sunrise8"></span></td>
+                            <td><span id="sunset8"></span></td>
+                            <td><span id="wind_degrees8"></span></td>
+                            <td><span id="wind_speed8"></span>m/s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+<footer class="text-center text-lg-start bg-white text-muted">
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <div class="me-5 d-none d-lg-block">
+          <span>Get connected with us on social networks:</span>
+      </div>
+      <div>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-twitter"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-google"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-instagram"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+              <i class="fab fa-github"></i>
+          </a>
+      </div>
+  </section>
+  <section class="">
+      <div class="container text-center text-md-start mt-5">
+          <div class="row mt-3">
+              <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                  <h6 class="text-uppercase fw-bold mb-4">
+                      <i class="fas fa-gem me-3 text-secondary"></i>Weatherpedia
+                  </h6>
+                  <p>
+                      Here you can find weather of your favourite cities , 
+                      To design your day's plan and schedule.
+
+                  </p>
+              </div>
+
+              <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                  
+                  <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                  <p><i class="fas fa-home me-3 text-secondary"></i> Jalgaon,Maharashtra </p>
+                  <p>
+                      <i class="fas fa-envelope me-3 text-secondary"></i>
+                      info@example.com
+                  </p>
+                  <p><i class="fas fa-phone me-3 text-secondary"></i> + 91 234 567 88</p>
+                  <p><i class="fas fa-print me-3 text-secondary"></i> + 91 234 567 89</p>
+
+          </div>
+
+      </div>
+  </section>
+
+  <div class="text-center p-4"ba(0, 0, 0, 0.025);">
+      © 2023 Copyright:
+      <a class="text-reset fw-bold" href="#">Weatherpedia</a>
+  </div>
+
+</footer>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+crossorigin="anonymous"></script>
+<script>
+    function myfun(){
+    document.getElementById('btnclick').innerHTML='Liked 1';
+      
+    }
+    
+    
+    const scrollProgress = document.getElementById("scroll-progress");
+    const height =
+      document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    
+    window.addEventListener("scroll", () => {
+      const scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      scrollProgress.style.width = `${(scrollTop / height) * 100}%`;
+    });
+    
+    
+    const getWeather = (city) => {
+      cityName.innerHTML = city;
+    
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+    
+           
+      
+        .then((response) =>response.json())
+        
+            .then((response) => {
+            console.log(response);
+            temp.innerHTML = (response.main.temp-273.15).toFixed(2);
+            temp2.innerHTML = (response.main.temp-273.15).toFixed(2);
+            min_temp.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+            max_temp.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+            description.innerHTML = response.weather[0].description;
+            feels_like.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+            wind_speed.innerHTML = response.wind.speed;
+            wind_speed2.innerHTML = response.wind.speed;
+            wind_degrees.innerHTML = response.wind.deg;
+            wind_gust.innerHTML = response.wind.gust;
+            lat.innerHTML = response.coord.lat;
+            lon.innerHTML = response.coord.lon;
+            time1.innerHTML=(new Date(response.dt*1000)).toLocaleTimeString("default");
+            day1.innerHTML=(new Date(response.dt*1000)).toLocaleString("en-US", {weekday: "long"})
+            date1.innerHTML=(new Date(response.dt*1000)).toLocaleString("en-US", {day: "numeric"})+" "+(new Date(response.dt*1000)).toLocaleString("en-US", {month: "long"})+" "+(new Date(response.dt*1000)).toLocaleString("en-US", {year: "numeric"});
+            timezone1.innerHTML= (new Date(response.dt*1000)).toLocaleString("en-US", {timeZoneName: "short"}).slice(-8);
+            //description2.innerHTML = response.weather[0].description;
+            sunrise.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+            sunrise1.innerHTML = ((new Date(response.sys.sunrise*1000)).toLocaleTimeString("default")).slice(0,-2);
+            sunrise2.innerHTML=((new Date(response.sys.sunrise*1000)).toLocaleTimeString("default")).slice(-2);
+            sunset.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+            
+            
+            document.getElementById("error").innerHTML = "";  
+            switch (response.weather[0].main) {
+              case "Snow":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://c4.wallpaperflare.com/wallpaper/814/791/615/ice-snow-snowfall-winter-wallpaper-preview.jpg')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/13d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/13n@2x.png";
+                }
+                break;
+              case "Clouds":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://rare-gallery.com/thumbs/351193-4k-wallpaper.jpg')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/02d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/04n@2x.png";
+                }
+                break;
+              case "Mist":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://images.pexels.com/photos/163323/fog-dawn-landscape-morgenstimmung-163323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/50d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/50n@2x.png')";
+             }
+                break;
+              case "Rain":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://wallpaperaccess.com/full/688287.jpg')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/10d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/10n@2x.png";
+                }
+                break;
+              case "Clear":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL3doeS1pcy1za3ktYmx1ZS5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOiIxMjAwIn19fQ==')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/01d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/01n@2x.png";
+                }
+                break;
+              case "Thunderstorm":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://images.pexels.com/photos/1162251/pexels-photo-1162251.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/11d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/11n@2x.png";
+                }
+                break;
+              case "Drizzle":
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://c4.wallpaperflare.com/wallpaper/66/330/336/rain-city-street-waterdrop-wallpaper-preview.jpg')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/09d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/09n@2x.png";
+                }
+                break;
+              default:
+                document.getElementById("wrapper-bg").style.backgroundImage = "url('https://images.pexels.com/photos/66997/pexels-photo-66997.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')";
+                if ((ampm = "AM")) {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/01d@2x.png";
+                } else {
+                  document.getElementById("wrapper-cg").src =
+                    "http://openweathermap.org/img/wn/01n@2x.png";
+                }
+                break;
+          }
+    
+        })
+        .catch((err)=>{
+          document.getElementById("error").innerHTML = "Weather forecast not found. Waiting for the correct city name.";
+        })
+        
+        ;
+      
+    
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=chennai&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp3.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like3.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description3.innerHTML = response.weather[0].description;
+          min_temp3.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp3.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed3.innerHTML = response.wind.speed;
+          wind_degrees3.innerHTML = response.wind.deg;
+          sunrise3.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset3.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        }).catch((err) => console.error(err));
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=lucknow&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp4.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like4.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description4.innerHTML = response.weather[0].description;
+          min_temp4.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp4.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed4.innerHTML = response.wind.speed;
+          wind_degrees4.innerHTML = response.wind.deg;
+          sunrise4.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset4.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        }).catch((err) => console.error(err));
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=chandrapur&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp5.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like5.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description5.innerHTML = response.weather[0].description;
+          min_temp5.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp5.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed5.innerHTML = response.wind.speed;
+          wind_degrees5.innerHTML = response.wind.deg;
+          sunrise5.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset5.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        }).catch((err) => console.error(err));
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=bhusawal&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp6.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like6.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description6.innerHTML = response.weather[0].description;
+          min_temp6.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp6.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed6.innerHTML = response.wind.speed;
+          wind_degrees6.innerHTML = response.wind.deg;
+          sunrise6.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset6.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        }).catch((err) => console.error(err));
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=delhi&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp7.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like7.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description7.innerHTML = response.weather[0].description;
+          min_temp7.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp7.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed7.innerHTML = response.wind.speed;
+          wind_degrees7.innerHTML = response.wind.deg;
+          sunrise7.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset7.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        }).catch((err) => console.error(err));
+        
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=pune&appid=e83b3c4c08285bf87b99f9bbc0abe3f0`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          //cloud_pct.innerHTML = response.cloud_pct;
+          temp8.innerHTML = (response.main.temp-273.15).toFixed(2);
+          feels_like8.innerHTML = (response.main.feels_like-273.15).toFixed(2);
+          description8.innerHTML = response.weather[0].description;
+          min_temp8.innerHTML = (response.main.temp_min-273.15).toFixed(2);
+          max_temp8.innerHTML = (response.main.temp_max-273.15).toFixed(2);
+          wind_speed8.innerHTML = response.wind.speed;
+          wind_degrees8.innerHTML = response.wind.deg;
+          sunrise8.innerHTML = (new Date(response.sys.sunrise*1000)).toLocaleTimeString("default");
+          sunset8.innerHTML = (new Date(response.sys.sunset*1000)).toLocaleTimeString("default");
+        })
+        .catch((err) => console.error(err));
+    };
+    submit.addEventListener("click", (e) => {
+      e.preventDefault();
+      getWeather(city.value);
+    });
+    
+    getWeather("London");
+    </script>
