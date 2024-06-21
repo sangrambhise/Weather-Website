@@ -103,7 +103,8 @@ requirements.txt: List of Python packages required by the project.
 .gitignore: Git ignore file to exclude certain files and directories from version control.
 
 ## Contact
-Project Link: https://github.com/your-username/your-repository
+www.linkedin.com/in/sangram-baban-bhise-998067223
+Project Link: https://github.com/sangrambhise/Weather-Website
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
